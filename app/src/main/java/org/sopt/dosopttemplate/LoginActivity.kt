@@ -31,10 +31,9 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        editTextId = binding.editid
-        editTextPassword = binding.editpassword
-        btnLogin = binding.btnLogin
-        btnSignin = binding.btnSignin
+        initializeViews()
+        setClickListeners()
+
         editTextPassword.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
 
         signUpLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -46,7 +45,16 @@ class LoginActivity : AppCompatActivity() {
                 receivedMbti = data?.getStringExtra("mbti")
             }
         }
+    }
 
+    private fun initializeViews() {
+        editTextId = binding.editid
+        editTextPassword = binding.editpassword
+        btnLogin = binding.btnLogin
+        btnSignin = binding.btnSignin
+    }
+
+    private fun setClickListeners() {
         btnLogin.setOnClickListener {
             val inputId = editTextId.text.toString()
             val inputPassword = editTextPassword.text.toString()
