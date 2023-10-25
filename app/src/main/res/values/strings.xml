@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">DoSoptTemplate</string>
+    <string name="ID">ID</string>
+    <string name="welcome">Welcome to SOPT!</string>
+    <string name="password">비밀번호</string>
+    <string name="dologin">로그인 하기</string>
+    <string name="dosignup">회원가입 하기</string>
 </resources>
