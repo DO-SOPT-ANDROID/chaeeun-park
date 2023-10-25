@@ -50,7 +50,7 @@ class SignUpActivity : AppCompatActivity() {
         return when {
             id.length !in 6..10 -> ValidationResult.ID_LENGTH_ERROR
             password.length !in 8..12 -> ValidationResult.PASSWORD_LENGTH_ERROR
-            nickname.isBlank() || nickname == " " -> ValidationResult.NICKNAME_ERROR
+            nickname.isBlank() -> ValidationResult.NICKNAME_ERROR
             mbti.isBlank() -> ValidationResult.MBTI_ERROR
             else -> ValidationResult.SUCCESS
         }
