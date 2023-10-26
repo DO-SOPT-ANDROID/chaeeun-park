@@ -1,8 +1,30 @@
 <resources>
     <string name="app_name">DoSoptTemplate</string>
-    <string name="ID">ID</string>
-    <string name="welcome">Welcome to SOPT!</string>
-    <string name="password">비밀번호</string>
-    <string name="dologin">로그인 하기</string>
-    <string name="dosignup">회원가입 하기</string>
+    <string name="btn_login">로그인 하기</string>
+    <string name="et_password_hint">비밀번호를 입력해주세요</string>
+    <string name="tv_password">Password</string>
+    <string name="et_id_hint">아이디를 입력해주세요</string>
+    <string name="tv_id">ID</string>
+    <string name="tv_main">Welcome To Sopt</string>
+    <string name="btn_login_signup">회원가입 하기</string>
+    <string name="tv_signup_title">SIGN UP</string>
+    <string name="btn_signup_signup">회원가입 하기</string>
+    <string name="tv_signup_nickname">Nickname</string>
+    <string name="et_nickname_hint">닉네임을 입력해주세요</string>
+    <string name="tv_signup_mbti">MBTI</string>
+    <string name="et_mbti_hint">MBTI를 입력해주세요</string>
+    <string name="tv_main_title">마이 페이지</string>
+    <string name="login_success">로그인에 성공했습니다.</string>
+    <string name="login_fail">아이디와 비밀번호를 다시 확인해주세요.</string>
+    <string name="signup_success">회원가입에 성공했습니다.</string>
+    <string name="signup_mbti">MBTI를 다시 입력해주세요. 공백은 불가능 합니다.</string>
+    <string name="signup_nickname">닉네임을 입력해주세요. 공백은 불가능합니다.</string>
+    <string name="signup_pw">PW는 8글자 이상 12글자 이하로 설정 가능합니다.</string>
+    <string name="signup_id">ID는 6글자 이상 10글자 이하로 설정 가능합니다.</string>
+    <string name="signup_fail">조건을 모두 입력해주세요.</string>
+    <string name="btn_logout">로그아웃</string>
+    <string name="bnv_do_android">DO ANDROID</string>
+    <string name="bnv_home">홈</string>
+    <string name="bnv_mypage">마이페이지</string>
+    <string name="btn_plus_text">상태메시지</string>
 </resources>
