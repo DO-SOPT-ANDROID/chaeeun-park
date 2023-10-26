@@ -12,7 +12,7 @@
     <string name="tv_signup_nickname">Nickname</string>
     <string name="et_nickname_hint">닉네임을 입력해주세요</string>
     <string name="tv_signup_mbti">MBTI</string>
-    <string name="et_age_hint">나이를 입력해주세요</string>
+    <string name="et_mbti_hint">MBTI를 입력해주세요</string>
     <string name="tv_main_title">마이 페이지</string>
     <string name="login_success">로그인에 성공했습니다.</string>
     <string name="login_fail">아이디와 비밀번호를 다시 확인해주세요.</string>
