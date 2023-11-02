@@ -8,6 +8,7 @@ import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import org.sopt.dosopttemplate.R
 import org.sopt.dosopttemplate.databinding.ActivitySignupBinding
+import org.sopt.dosopttemplate.di.UserSharedPreferences
 import org.sopt.dosopttemplate.util.BackPressedUtil
 import org.sopt.dosopttemplate.util.showShortSnackBar
 import org.sopt.dosopttemplate.util.showShortToast
@@ -34,6 +35,7 @@ class SignUpActivity : AppCompatActivity() {
             val userPw = binding.etSignupPw.text.toString()
             val userNickname = binding.etSignupNickname.text.toString()
             val userMbti = binding.etSignupMbti.text.toString()
+
 
             if (isInputValid(userId, userPw, userNickname, userMbti)) {
                 showShortToast(getString(R.string.signup_success))
@@ -86,4 +88,6 @@ class SignUpActivity : AppCompatActivity() {
     fun hideKeyboard(v: View) {
         imm?.hideSoftInputFromWindow(v.windowToken, 0)
     }
+
+
 }
