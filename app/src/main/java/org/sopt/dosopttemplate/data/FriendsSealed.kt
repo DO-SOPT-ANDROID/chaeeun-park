@@ -12,5 +12,4 @@ sealed class FriendsSealed {
         val profileImage: Int,
     ) : FriendsSealed()
 
-
 }
