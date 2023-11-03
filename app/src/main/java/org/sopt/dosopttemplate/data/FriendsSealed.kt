@@ -12,5 +12,18 @@ sealed class FriendsSealed {
         val profileImage: Int,
     ) : FriendsSealed()
 
+    data class FriendsMelon(
+        val name: String,
+        val description: String?,
+        val profileImage: Int,
+        val musicTitle: String?,
+    ) : FriendsSealed()
+
+    data class FriendsBirthday(
+        val name: String,
+        val description: String?,
+        val profileImage: Int,
+    ) : FriendsSealed()
+
 
 }
