@@ -4,5 +4,7 @@
     <color name="white">#FFFFFFFF</color>
     <color name="text_gray">#808080</color>
     <color name="btn_light_gray">#D9D9d9</color>
+    <color name="melon_green">#3FE87F</color>
+    <color name="birthday_red">#ff3300</color>
 
 </resources>
