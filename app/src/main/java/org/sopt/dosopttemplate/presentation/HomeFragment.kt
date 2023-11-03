@@ -37,6 +37,7 @@ class HomeFragment : Fragment() {
         _binding = null
     }
 
+
     private fun setupRecyclerView() {
         val friendsSealedAdapter = FriendsSealedAdapter(requireContext())
         binding.rvFriends.adapter = friendsSealedAdapter
