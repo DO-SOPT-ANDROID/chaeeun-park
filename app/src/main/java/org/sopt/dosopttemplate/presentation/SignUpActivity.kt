@@ -52,31 +52,29 @@ class SignUpActivity : AppCompatActivity() {
     }
 
     private fun isInputValid(userId: String, userPw: String, userNickname: String, userMbti: String): Boolean {
-        if (userId.isEmpty() || userPw.isEmpty() || userNickname.isEmpty() || userMbti.isEmpty()) {
-            showShortSnackBar(binding.root, getString(R.string.signup_fail))
-            return false
+        //코드리뷰 반영 when 문으로 수정하여 가독성 높이기
+        when {
+            userId.isEmpty() || userPw.isEmpty() || userNickname.isEmpty() || userMbti.isEmpty() -> {
+                showShortSnackBar(binding.root, getString(R.string.signup_fail))
+                return false
+            }
+            userId.length > 10 || userId.length < 6 -> {
+                showShortSnackBar(binding.root, getString(R.string.signup_id))
+                return false
+            }
+            userPw.length > 12 || userPw.length < 8 -> {
+                showShortSnackBar(binding.root, getString(R.string.signup_pw))
+                return false
+            }
+            userNickname.isBlank() -> {
+                showShortSnackBar(binding.root, getString(R.string.signup_nickname))
+                return false
+            }
+            userMbti.isBlank() -> {
+                showShortSnackBar(binding.root, getString(R.string.signup_mbti))
+                return false
+            }
         }
-
-        if (userId.length > 10 || userId.length < 6) {
-            showShortSnackBar(binding.root, getString(R.string.signup_id))
-            return false
-        }
-
-        if (userPw.length > 12 || userPw.length < 8) {
-            showShortSnackBar(binding.root, getString(R.string.signup_pw))
-            return false
-        }
-
-        if (userNickname.isBlank()) {
-            showShortSnackBar(binding.root, getString(R.string.signup_nickname))
-            return false
-        }
-
-        if (userMbti.isBlank()) {
-            showShortSnackBar(binding.root, getString(R.string.signup_mbti))
-            return false
-        }
-
         return true
     }
 
