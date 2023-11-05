@@ -6,6 +6,9 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import org.sopt.dosopttemplate.R
 import org.sopt.dosopttemplate.databinding.ActivitySetBinding
+import org.sopt.dosopttemplate.presentation.android.DoAndroidFragment
+import org.sopt.dosopttemplate.presentation.home.HomeFragment
+import org.sopt.dosopttemplate.presentation.mypage.MypageFragment
 import org.sopt.dosopttemplate.util.BackPressedUtil
 
 

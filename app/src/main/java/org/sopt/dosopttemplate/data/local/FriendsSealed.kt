@@ -1,4 +1,4 @@
-package org.sopt.dosopttemplate.data
+package org.sopt.dosopttemplate.data.local
 
 sealed class FriendsSealed {
     data class FriendsMy(

@@ -1,6 +1,7 @@
-package org.sopt.dosopttemplate.data
+package org.sopt.dosopttemplate.data.dummy
 
 import org.sopt.dosopttemplate.R
+import org.sopt.dosopttemplate.data.local.FriendsSealed
 
 object DummyFriendsData {
     val dummyFriendList = listOf(

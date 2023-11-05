@@ -1,4 +1,4 @@
-package org.sopt.dosopttemplate.presentation
+package org.sopt.dosopttemplate.presentation.auth
 
 import android.content.Context
 import android.content.Intent
@@ -8,7 +8,6 @@ import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import org.sopt.dosopttemplate.R
 import org.sopt.dosopttemplate.databinding.ActivitySignupBinding
-import org.sopt.dosopttemplate.di.UserSharedPreferences
 import org.sopt.dosopttemplate.util.BackPressedUtil
 import org.sopt.dosopttemplate.util.showShortSnackBar
 import org.sopt.dosopttemplate.util.showShortToast

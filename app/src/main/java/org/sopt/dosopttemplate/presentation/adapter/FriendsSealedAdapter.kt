@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import org.sopt.dosopttemplate.R
-import org.sopt.dosopttemplate.data.FriendsSealed
+import org.sopt.dosopttemplate.data.local.FriendsSealed
 import org.sopt.dosopttemplate.databinding.ItemFriendsBirthdayBinding
 import org.sopt.dosopttemplate.databinding.ItemFriendsMelonBinding
 import org.sopt.dosopttemplate.databinding.ItemFriendsMyBinding

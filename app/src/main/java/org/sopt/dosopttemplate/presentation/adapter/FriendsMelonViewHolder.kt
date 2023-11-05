@@ -1,7 +1,7 @@
 package org.sopt.dosopttemplate.presentation.adapter
 
 import androidx.recyclerview.widget.RecyclerView
-import org.sopt.dosopttemplate.data.FriendsSealed
+import org.sopt.dosopttemplate.data.local.FriendsSealed
 import org.sopt.dosopttemplate.databinding.ItemFriendsMelonBinding
 
 class FriendsMelonViewHolder(private var binding: ItemFriendsMelonBinding) :
