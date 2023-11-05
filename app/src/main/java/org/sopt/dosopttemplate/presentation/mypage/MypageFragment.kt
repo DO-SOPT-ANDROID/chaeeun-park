@@ -11,11 +11,13 @@ import org.sopt.dosopttemplate.databinding.FragmentMypageBinding
 import org.sopt.dosopttemplate.di.UserSharedPreferences
 import org.sopt.dosopttemplate.presentation.auth.LoginActivity
 
+
 class MypageFragment : Fragment() {
 
     private var _binding: FragmentMypageBinding? = null
     private val binding: FragmentMypageBinding
         get() = requireNotNull(_binding) { "바인딩 error" }
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -69,6 +71,14 @@ class MypageFragment : Fragment() {
             val intent = Intent(requireContext(), LoginActivity::class.java)
             startActivity(intent)
         }
+
+        binding.btnShowBottomsheet.setOnClickListener {
+            showBottomSheet()
+        }
+    }
+    fun showBottomSheet() {
+        val bottomSheetFragment = BottomSheetFragment()
+        bottomSheetFragment.show(childFragmentManager, bottomSheetFragment.tag)
     }
 
     override fun onDestroyView() {
@@ -76,4 +86,3 @@ class MypageFragment : Fragment() {
         _binding = null
     }
 }
-
