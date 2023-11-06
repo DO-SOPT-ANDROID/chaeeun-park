@@ -14,9 +14,18 @@ import org.sopt.dosopttemplate.util.BackPressedUtil
 import org.sopt.dosopttemplate.util.showShortSnackBar
 import org.sopt.dosopttemplate.util.showShortToast
 
+
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
     private var imm: InputMethodManager? = null
+
+    // 코드리뷰 반영 - 유지보수를 위해 인텐트 엑스트라 값들을 상수화로 진행하기
+    companion object {
+        const val EXTRA_ID = "ID"
+        const val EXTRA_PW = "PW"
+        const val EXTRA_NICKNAME = "Nickname"
+        const val EXTRA_MBTI = "MBTI"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         binding = ActivityLoginBinding.inflate(layoutInflater)
@@ -36,12 +45,12 @@ class LoginActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        // 로그인 하기
+        // 로그인 하기 - 코드리뷰 반영 (상수화)
         binding.btnLoginLogin.setOnClickListener {
-            val getId = intent.getStringExtra("ID")
-            val getPw = intent.getStringExtra("PW")
-            val getNickname = intent.getStringExtra("Nickname")
-            val getMbti = intent.getStringExtra("MBTI")
+            val getId = intent.getStringExtra(EXTRA_ID)
+            val getPw = intent.getStringExtra(EXTRA_PW)
+            val getNickname = intent.getStringExtra(EXTRA_NICKNAME)
+            val getMbti = intent.getStringExtra(EXTRA_MBTI)
 
             if (binding.etSignupId.text.toString() == getId && binding.etSignupPw.text.toString() == getPw) {
                 showShortToast(getString(R.string.login_success))
