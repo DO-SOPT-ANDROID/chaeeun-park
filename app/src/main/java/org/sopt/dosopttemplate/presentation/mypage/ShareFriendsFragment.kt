@@ -4,24 +4,22 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import org.sopt.dosopttemplate.databinding.BottomSheetMypageBinding
 
 
-class BottomSheetFragment : BottomSheetDialogFragment() {
+class ShareFriendsFragment : BottomSheetDialogFragment() {
 
     private var _binding: BottomSheetMypageBinding? = null
     private val binding: BottomSheetMypageBinding
         get() = requireNotNull(_binding) { "바인딩 error" }
 
 
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = BottomSheetMypageBinding.inflate(inflater, container, false) // 바인딩 초기화
         return binding.root
     }
