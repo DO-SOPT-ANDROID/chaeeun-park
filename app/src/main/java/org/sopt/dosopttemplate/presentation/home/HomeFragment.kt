@@ -11,7 +11,10 @@ import org.sopt.dosopttemplate.presentation.adapter.FriendsSealedAdapter
 
 class HomeFragment : Fragment() {
 
+    // 코드리뷰 반영 어댑터 전역변수로 선언해두고, 뷰 종료시 함께 지워서 메모리 누수 방지하기
     private var _binding: FragmentHomeBinding? = null
+    private var _adapter: FriendsSealedAdapter? = null
+
     private val binding: FragmentHomeBinding
         get() = requireNotNull(_binding) { "바인딩 error" }
 
@@ -33,15 +36,23 @@ class HomeFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        // 뷰 바인딩 해제
+        // 뷰 바인딩 해제, 어댑터 해제(코드리뷰 반영)
         _binding = null
+        _adapter = null
     }
 
     private fun setupRecyclerView() {
         val friendsSealedAdapter = FriendsSealedAdapter(requireContext())
         binding.rvFriends.adapter = friendsSealedAdapter
         friendsSealedAdapter.setFriendsData(ArrayList(DummyFriendsData.dummyFriendList))
+        scrollToTop()
     }
+
+    private fun scrollToTop() {
+        binding.rvFriends.smoothScrollToPosition(0)
+    }
+
+
 }
 
 
