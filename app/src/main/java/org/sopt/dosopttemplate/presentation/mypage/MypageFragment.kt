@@ -77,8 +77,8 @@ class MypageFragment : Fragment() {
         }
     }
     fun showBottomSheet() {
-        val bottomSheetFragment = BottomSheetFragment()
-        bottomSheetFragment.show(childFragmentManager, bottomSheetFragment.tag)
+        val shareFriendsFragment = ShareFriendsFragment()
+        shareFriendsFragment.show(childFragmentManager, shareFriendsFragment.tag)
     }
 
     override fun onDestroyView() {

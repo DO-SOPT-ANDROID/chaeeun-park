@@ -27,7 +27,7 @@ class FriendsSealedAdapter(context: Context) : RecyclerView.Adapter<RecyclerView
         is FriendsSealed.FriendsMy -> R.layout.item_friends_my
         is FriendsSealed.FriendsNormal -> R.layout.item_friends_normal
         is FriendsSealed.FriendsMelon -> R.layout.item_friends_melon
-        is FriendsSealed.FriendsBirthday ->R.layout.item_friends_birthday
+        is FriendsSealed.FriendsBirthday -> R.layout.item_friends_birthday
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -39,12 +39,15 @@ class FriendsSealedAdapter(context: Context) : RecyclerView.Adapter<RecyclerView
             R.layout.item_friends_my -> FriendsMyViewHolder(
                 ItemFriendsMyBinding.bind(view)
             )
+
             R.layout.item_friends_birthday -> FriendsBirthdayViewHolder(
                 ItemFriendsBirthdayBinding.bind(view)
             )
+
             R.layout.item_friends_melon -> FriendsMelonViewHolder(
                 ItemFriendsMelonBinding.bind(view)
             )
+
             else -> FriendsNormalViewHolder(
                 ItemFriendsNormalBinding.bind(view)
             )

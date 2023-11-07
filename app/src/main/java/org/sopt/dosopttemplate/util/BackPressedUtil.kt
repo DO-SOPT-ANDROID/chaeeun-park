@@ -6,6 +6,7 @@ import androidx.viewbinding.ViewBinding
 import com.google.android.material.snackbar.Snackbar
 
 class BackPressedUtil<T : ViewBinding>(private val activity: AppCompatActivity) {
+    private lateinit var binding: ViewBinding
     private lateinit var callback: OnBackPressedCallback
     private var delayTime: Long = 0
 
@@ -24,8 +25,9 @@ class BackPressedUtil<T : ViewBinding>(private val activity: AppCompatActivity) 
     }
 
     private fun setSnackbar(text: String) {
+        //코드리뷰 반영 binding 활용
         Snackbar.make(
-            activity.findViewById(android.R.id.content),
+            binding.root,
             text,
             Snackbar.LENGTH_SHORT,
         ).show()
