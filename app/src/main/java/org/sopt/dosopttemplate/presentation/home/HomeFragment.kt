@@ -45,12 +45,8 @@ class HomeFragment : Fragment() {
         val friendsSealedAdapter = FriendsSealedAdapter(requireContext())
         binding.rvFriends.adapter = friendsSealedAdapter
         friendsSealedAdapter.setFriendsData(ArrayList(DummyFriendsData.dummyFriendList))
-        scrollToTop()
     }
 
-    private fun scrollToTop() {
-        binding.rvFriends.smoothScrollToPosition(0)
-    }
 
 
 }
