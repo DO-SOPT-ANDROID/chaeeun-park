@@ -1,6 +1,7 @@
 package org.sopt.dosopttemplate.presentation.adapter
 
 import androidx.recyclerview.widget.RecyclerView
+import coil.api.load
 import org.sopt.dosopttemplate.data.local.FriendsSealed
 import org.sopt.dosopttemplate.databinding.ItemFriendsMyBinding
 
@@ -9,7 +10,7 @@ class FriendsMyViewHolder(private val binding: ItemFriendsMyBinding) :
 
     fun onBindView(friendsMyData: FriendsSealed.FriendsMy) {
         binding.run {
-            ivFriendsMyProfile.setImageResource(friendsMyData.profileImage)
+            ivFriendsMyProfile.load(friendsMyData.profileImage)
             ivFriendsMyProfile.clipToOutline = true
             tvFriendsMyName.text = friendsMyData.name
         }
