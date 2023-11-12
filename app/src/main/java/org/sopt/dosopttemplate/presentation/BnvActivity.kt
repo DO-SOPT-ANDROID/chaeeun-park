@@ -5,10 +5,15 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import org.sopt.dosopttemplate.R
 import org.sopt.dosopttemplate.databinding.ActivitySetBinding
+import org.sopt.dosopttemplate.presentation.android.DoAndroidFragment
+import org.sopt.dosopttemplate.presentation.home.HomeFragment
+import org.sopt.dosopttemplate.presentation.mypage.MypageFragment
 import org.sopt.dosopttemplate.util.BackPressedUtil
 
-class SetActivity : AppCompatActivity() {
+
+class BnvActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySetBinding
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,7 +47,9 @@ class SetActivity : AppCompatActivity() {
             true
         }
         binding.bnvHome.selectedItemId = R.id.menu_home
+
     }
+
 
     private fun createMypageFragmentWithUserInfo(): Fragment {
         val fragment = MypageFragment()

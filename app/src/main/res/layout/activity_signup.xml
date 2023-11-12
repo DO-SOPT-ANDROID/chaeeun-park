@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:onClick="hideKeyboard"
     android:windowSoftInputMode="adjustResize"
-    tools:context=".presentation.SignUpActivity">
+    tools:context=".presentation.auth.SignUpActivity">
     <TextView
         android:id="@+id/tv_signup_title"
         android:layout_width="0dp"

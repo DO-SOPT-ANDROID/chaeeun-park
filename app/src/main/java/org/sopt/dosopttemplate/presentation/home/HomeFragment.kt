@@ -1,11 +1,11 @@
-package org.sopt.dosopttemplate.presentation
+package org.sopt.dosopttemplate.presentation.home
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import org.sopt.dosopttemplate.data.DummyFriendsData
+import org.sopt.dosopttemplate.data.dummy.DummyFriendsData
 import org.sopt.dosopttemplate.databinding.FragmentHomeBinding
 import org.sopt.dosopttemplate.presentation.adapter.FriendsSealedAdapter
 
@@ -46,6 +46,9 @@ class HomeFragment : Fragment() {
         binding.rvFriends.adapter = friendsSealedAdapter
         friendsSealedAdapter.setFriendsData(ArrayList(DummyFriendsData.dummyFriendList))
     }
+
+
+
 }
 
 

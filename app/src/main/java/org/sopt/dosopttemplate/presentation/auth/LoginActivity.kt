@@ -1,4 +1,4 @@
-package org.sopt.dosopttemplate.presentation
+package org.sopt.dosopttemplate.presentation.auth
 
 import android.content.Context
 import android.content.Intent
@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import org.sopt.dosopttemplate.R
 import org.sopt.dosopttemplate.databinding.ActivityLoginBinding
 import org.sopt.dosopttemplate.di.UserSharedPreferences
+import org.sopt.dosopttemplate.presentation.BnvActivity
 import org.sopt.dosopttemplate.util.BackPressedUtil
 import org.sopt.dosopttemplate.util.showShortSnackBar
 import org.sopt.dosopttemplate.util.showShortToast
@@ -33,7 +34,7 @@ class LoginActivity : AppCompatActivity() {
 
         // 자동 로그인이 활성화된 경우
         if (UserSharedPreferences.isLoggedIn(this)) {
-            val intent = Intent(this, SetActivity::class.java)
+            val intent = Intent(this, BnvActivity::class.java)
             startActivity(intent)
             finish()
         }
@@ -63,7 +64,7 @@ class LoginActivity : AppCompatActivity() {
                     UserSharedPreferences.setUserMbti(this, getMbti!!)
                 }
 
-                val intent = Intent(this, SetActivity::class.java)
+                val intent = Intent(this, BnvActivity::class.java)
                 intent.putExtra("ID", getId)
                 intent.putExtra("Nickname", getNickname)
                 intent.putExtra("MBTI", getMbti)
@@ -84,3 +85,4 @@ class LoginActivity : AppCompatActivity() {
         imm?.hideSoftInputFromWindow(v.windowToken, 0)
     }
 }
+
