@@ -11,7 +11,7 @@ import org.sopt.dosopttemplate.presentation.mypage.MypageFragment
 import org.sopt.dosopttemplate.util.BackPressedUtil
 
 
-class SetActivity : AppCompatActivity() {
+class BnvActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySetBinding
 
 
