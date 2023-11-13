@@ -6,20 +6,22 @@ import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
-import org.sopt.dosopttemplate.R
 import org.sopt.dosopttemplate.databinding.ActivityLoginBinding
 import org.sopt.dosopttemplate.di.UserSharedPreferences
 import org.sopt.dosopttemplate.presentation.BnvActivity
-import org.sopt.dosopttemplate.util.BackPressedUtil
+import org.sopt.dosopttemplate.server.LoginReq
+import org.sopt.dosopttemplate.server.LoginResp
+import org.sopt.dosopttemplate.server.ServicePool
 import org.sopt.dosopttemplate.util.showShortSnackBar
-import org.sopt.dosopttemplate.util.showShortToast
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
     private var imm: InputMethodManager? = null
 
-    // 코드리뷰 반영 - 유지보수를 위해 인텐트 엑스트라 값들을 상수화로 진행하기
     companion object {
         const val EXTRA_ID = "ID"
         const val EXTRA_PW = "PW"
@@ -32,57 +34,65 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        // 자동 로그인이 활성화된 경우
         if (UserSharedPreferences.isLoggedIn(this)) {
             val intent = Intent(this, BnvActivity::class.java)
             startActivity(intent)
             finish()
         }
 
-        // 회원가입 하러 가기
         binding.btnSignupSignup.setOnClickListener {
             val intent = Intent(this, SignUpActivity::class.java)
             startActivity(intent)
         }
 
-        // 로그인 하기 - 코드리뷰 반영 (상수화)
         binding.btnLoginLogin.setOnClickListener {
-            val getId = intent.getStringExtra(EXTRA_ID)
-            val getPw = intent.getStringExtra(EXTRA_PW)
-            val getNickname = intent.getStringExtra(EXTRA_NICKNAME)
-            val getMbti = intent.getStringExtra(EXTRA_MBTI)
+            val userId = binding.etSignupId.text.toString()
+            val userPw = binding.etSignupPw.text.toString()
 
-            if (binding.etSignupId.text.toString() == getId && binding.etSignupPw.text.toString() == getPw) {
-                showShortToast(getString(R.string.login_success))
+            val loginReq = LoginReq(userId, userPw)
+            val call = ServicePool.authService.login(loginReq)
 
-                if (binding.cbLoginAutologin.isChecked) {
-                    // 자동 로그인 선택 시 사용자 정보 저장
-                    UserSharedPreferences.setLoggedIn(this, true)
-                    UserSharedPreferences.setUserID(this, getId)
-                    UserSharedPreferences.setUserPw(this, getPw)
-                    UserSharedPreferences.setUserNickname(this, getNickname!!)
-                    UserSharedPreferences.setUserMbti(this, getMbti!!)
+            call.enqueue(object : Callback<LoginResp> {
+                override fun onResponse(call: Call<LoginResp>, response: Response<LoginResp>) {
+                    if (response.isSuccessful) {
+                        val loginResp = response.body()
+                        if (loginResp != null) {
+                            UserSharedPreferences.setLoggedIn(this@LoginActivity, true)
+                            UserSharedPreferences.setUserID(
+                                this@LoginActivity,
+                                loginResp.id.toString()
+                            )
+                            UserSharedPreferences.setUserNickname(
+                                this@LoginActivity,
+                                loginResp.nickname
+                            )
+                            // Set other user data if needed
+
+                            val intent = Intent(this@LoginActivity, BnvActivity::class.java)
+                            intent.putExtra("ID", loginResp.id.toString())
+                            intent.putExtra("Nickname", loginResp.nickname)
+                            // Add other necessary data
+                            startActivity(intent)
+                            finish()
+                        } else {
+                            showShortSnackBar(binding.root, "로그인 실패")
+                        }
+                    }
+                    else {
+                        showShortSnackBar(binding.root, "로그인 실패")
+                    }
                 }
 
-                val intent = Intent(this, BnvActivity::class.java)
-                intent.putExtra("ID", getId)
-                intent.putExtra("Nickname", getNickname)
-                intent.putExtra("MBTI", getMbti)
-                startActivity(intent)
-                finish()
-            } else {
-                showShortSnackBar(binding.root, getString(R.string.login_fail))
-            }
+                override fun onFailure(call: Call<LoginResp>, t: Throwable) {
+                    showShortSnackBar(binding.root, "네트워크 오류")
+                }
+            })
         }
 
-        // 키보드 내리기
         imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager?
-        val backPressedUtil = BackPressedUtil<ActivityLoginBinding>(this)
-        backPressedUtil.BackButton()
     }
 
     fun hideKeyboard(v: View) {
         imm?.hideSoftInputFromWindow(v.windowToken, 0)
     }
 }
-

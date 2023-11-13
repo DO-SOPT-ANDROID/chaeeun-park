@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import org.sopt.dosopttemplate.R
-import org.sopt.dosopttemplate.databinding.ActivitySetBinding
+import org.sopt.dosopttemplate.databinding.ActivityBnvBinding
 import org.sopt.dosopttemplate.presentation.android.DoAndroidFragment
 import org.sopt.dosopttemplate.presentation.home.HomeFragment
 import org.sopt.dosopttemplate.presentation.mypage.MypageFragment
@@ -12,12 +12,12 @@ import org.sopt.dosopttemplate.util.BackPressedUtil
 
 
 class BnvActivity : AppCompatActivity() {
-    private lateinit var binding: ActivitySetBinding
+    private lateinit var binding: ActivityBnvBinding
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivitySetBinding.inflate(layoutInflater)
+        binding = ActivityBnvBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         initializeFragment()
@@ -75,7 +75,7 @@ class BnvActivity : AppCompatActivity() {
     }
 
     private fun handleBackButton() {
-        val backPressedUtil = BackPressedUtil<ActivitySetBinding>(this)
+        val backPressedUtil = BackPressedUtil<ActivityBnvBinding>(this)
         backPressedUtil.BackButton()
     }
 }

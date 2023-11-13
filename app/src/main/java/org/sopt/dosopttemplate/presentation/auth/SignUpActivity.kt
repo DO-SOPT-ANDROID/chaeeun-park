@@ -8,9 +8,13 @@ import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import org.sopt.dosopttemplate.R
 import org.sopt.dosopttemplate.databinding.ActivitySignupBinding
+import org.sopt.dosopttemplate.server.ServicePool
+import org.sopt.dosopttemplate.server.SignUpReq
 import org.sopt.dosopttemplate.util.BackPressedUtil
 import org.sopt.dosopttemplate.util.showShortSnackBar
-import org.sopt.dosopttemplate.util.showShortToast
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class SignUpActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySignupBinding
@@ -35,40 +39,54 @@ class SignUpActivity : AppCompatActivity() {
             val userNickname = binding.etSignupNickname.text.toString()
             val userMbti = binding.etSignupMbti.text.toString()
 
-
             if (isInputValid(userId, userPw, userNickname, userMbti)) {
-                showShortToast(getString(R.string.signup_success))
+                val signUpReq = SignUpReq(userId, userNickname, userPw)
+                val call = ServicePool.authService.signUp(signUpReq)
 
-                val intent = Intent(this, LoginActivity::class.java)
-                intent.putExtra("ID", userId)
-                intent.putExtra("PW", userPw)
-                intent.putExtra("Nickname", userNickname)
-                intent.putExtra("MBTI", userMbti)
-                startActivity(intent)
-                finish()
+                call.enqueue(object : Callback<Unit> {
+                    override fun onResponse(call: Call<Unit>, response: Response<Unit>) {
+                        if (response.isSuccessful) {
+                            finish()
+                        } else {
+                            showShortSnackBar(binding.root, "회원가입 실패")
+                        }
+                    }
+
+                    override fun onFailure(call: Call<Unit>, t: Throwable) {
+                        showShortSnackBar(binding.root, "네트워크 오류")
+                    }
+                })
             }
         }
     }
 
-    private fun isInputValid(userId: String, userPw: String, userNickname: String, userMbti: String): Boolean {
-        //코드리뷰 반영 when 문으로 수정하여 가독성 높이기
+    private fun isInputValid(
+        userId: String,
+        userPw: String,
+        userNickname: String,
+        userMbti: String
+    ): Boolean {
         when {
             userId.isEmpty() || userPw.isEmpty() || userNickname.isEmpty() || userMbti.isEmpty() -> {
                 showShortSnackBar(binding.root, getString(R.string.signup_fail))
                 return false
             }
+
             userId.length > 10 || userId.length < 6 -> {
                 showShortSnackBar(binding.root, getString(R.string.signup_id))
                 return false
             }
+
             userPw.length > 12 || userPw.length < 8 -> {
                 showShortSnackBar(binding.root, getString(R.string.signup_pw))
                 return false
             }
+
             userNickname.isBlank() -> {
                 showShortSnackBar(binding.root, getString(R.string.signup_nickname))
                 return false
             }
+
             userMbti.isBlank() -> {
                 showShortSnackBar(binding.root, getString(R.string.signup_mbti))
                 return false
@@ -85,6 +103,4 @@ class SignUpActivity : AppCompatActivity() {
     fun hideKeyboard(v: View) {
         imm?.hideSoftInputFromWindow(v.windowToken, 0)
     }
-
-
 }
