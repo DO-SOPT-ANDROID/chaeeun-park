@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-open class RespResult(
+open class ResultResp(
     @SerialName("message")
     val message: String = ""
 )

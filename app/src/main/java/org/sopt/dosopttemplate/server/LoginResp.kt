@@ -11,4 +11,4 @@ data class LoginResp(
     val username: String,
     @SerialName("nickname")
     val nickname: String
-): RespResult()
+): ResultResp()
