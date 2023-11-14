@@ -66,12 +66,9 @@ class LoginActivity : AppCompatActivity() {
                                 this@LoginActivity,
                                 loginResp.nickname
                             )
-                            // Set other user data if needed
-
                             val intent = Intent(this@LoginActivity, BnvActivity::class.java)
                             intent.putExtra("ID", loginResp.id.toString())
                             intent.putExtra("Nickname", loginResp.nickname)
-                            // Add other necessary data
                             startActivity(intent)
                             finish()
                         } else {
