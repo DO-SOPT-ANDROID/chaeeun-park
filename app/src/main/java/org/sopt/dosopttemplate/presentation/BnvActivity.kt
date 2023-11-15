@@ -53,9 +53,10 @@ class BnvActivity : AppCompatActivity() {
 
     private fun createMypageFragmentWithUserInfo(): Fragment {
         val fragment = MypageFragment()
+
         val getId = intent.getStringExtra("ID")
         val getNickname = intent.getStringExtra("Nickname")
-        val getMbti = intent.getStringExtra("MBTI")
+        val getMbti = intent.getStringExtra("Mbti")
 
         val bundle = Bundle().apply {
             putString("userId", getId)
