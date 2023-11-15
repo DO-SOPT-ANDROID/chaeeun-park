@@ -1,7 +1,6 @@
 package org.sopt.dosopttemplate.presentation.auth
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -9,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import org.sopt.dosopttemplate.R
 import org.sopt.dosopttemplate.databinding.ActivitySignupBinding
 import org.sopt.dosopttemplate.server.ServicePool
-import org.sopt.dosopttemplate.server.SignUpReq
+import org.sopt.dosopttemplate.server.auth.SignUpReq
 import org.sopt.dosopttemplate.util.BackPressedUtil
 import org.sopt.dosopttemplate.util.showShortSnackBar
 import retrofit2.Call
@@ -18,7 +17,7 @@ import retrofit2.Response
 
 class SignUpActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySignupBinding
-    private var imm: InputMethodManager? = null
+    private var inputMethodManager: InputMethodManager? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,7 +39,7 @@ class SignUpActivity : AppCompatActivity() {
             val userMbti = binding.etSignupMbti.text.toString()
 
             if (isInputValid(userId, userPw, userNickname, userMbti)) {
-                val signUpReq = SignUpReq(userId, userNickname, userPw)
+                val signUpReq = SignUpReq(userId, userPw, userNickname, userMbti)
                 val call = ServicePool.authService.signUp(signUpReq)
 
                 call.enqueue(object : Callback<Unit> {
@@ -48,12 +47,12 @@ class SignUpActivity : AppCompatActivity() {
                         if (response.isSuccessful) {
                             finish()
                         } else {
-                            showShortSnackBar(binding.root, "회원가입 실패")
+                            showShortSnackBar(binding.root, getString(R.string.signup_fail))
                         }
                     }
 
                     override fun onFailure(call: Call<Unit>, t: Throwable) {
-                        showShortSnackBar(binding.root, "네트워크 오류")
+                        showShortSnackBar(binding.root, getString(R.string.network_error))
                     }
                 })
             }
@@ -67,17 +66,17 @@ class SignUpActivity : AppCompatActivity() {
         userMbti: String
     ): Boolean {
         when {
-            userId.isEmpty() || userPw.isEmpty() || userNickname.isEmpty() || userMbti.isEmpty() -> {
+            userId.isBlank() || userPw.isBlank() || userNickname.isBlank() || userMbti.isBlank() -> {
                 showShortSnackBar(binding.root, getString(R.string.signup_fail))
                 return false
             }
 
-            userId.length > 10 || userId.length < 6 -> {
+            userId.length !in 6..10 -> {
                 showShortSnackBar(binding.root, getString(R.string.signup_id))
                 return false
             }
 
-            userPw.length > 12 || userPw.length < 8 -> {
+            userPw.length !in 8..12 -> {
                 showShortSnackBar(binding.root, getString(R.string.signup_pw))
                 return false
             }
@@ -96,11 +95,11 @@ class SignUpActivity : AppCompatActivity() {
     }
 
     private fun setupKeyboardHiding() {
-        imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager?
+        inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager?
         binding.root.setOnClickListener { hideKeyboard(it) }
     }
 
-    fun hideKeyboard(v: View) {
-        imm?.hideSoftInputFromWindow(v.windowToken, 0)
+    private fun hideKeyboard(view: View) {
+        inputMethodManager?.hideSoftInputFromWindow(view.windowToken, 0)
     }
 }
