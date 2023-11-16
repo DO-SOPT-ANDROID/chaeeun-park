@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import org.sopt.dosopttemplate.R
 import org.sopt.dosopttemplate.databinding.ActivityBnvBinding
 import org.sopt.dosopttemplate.presentation.android.DoAndroidFragment
+import org.sopt.dosopttemplate.people.PeopleFragment
 import org.sopt.dosopttemplate.presentation.home.HomeFragment
 import org.sopt.dosopttemplate.presentation.mypage.MypageFragment
 import org.sopt.dosopttemplate.util.BackPressedUtil
@@ -30,7 +31,7 @@ class BnvActivity : AppCompatActivity() {
 
         if (currentFragment == null) {
             supportFragmentManager.beginTransaction()
-                .add(R.id.fcv_home, HomeFragment())
+                .add(R.id.fcv_home, PeopleFragment())
                 .commit()
         }
     }
@@ -40,6 +41,7 @@ class BnvActivity : AppCompatActivity() {
             val fragment = when (item.itemId) {
                 R.id.menu_home -> HomeFragment()
                 R.id.menu_do_android -> DoAndroidFragment()
+                R.id.menu_plus -> PeopleFragment()
                 R.id.menu_mypage -> createMypageFragmentWithUserInfo()
                 else -> return@setOnItemSelectedListener false
             }
