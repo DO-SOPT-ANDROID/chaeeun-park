@@ -5,58 +5,48 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
+import org.sopt.dosopttemplate.data.dummy.DummyFriendsData
 import org.sopt.dosopttemplate.databinding.FragmentHomeBinding
-import org.sopt.dosopttemplate.presentation.adapter.UserAdapter
-import org.sopt.dosopttemplate.server.ServicePool
-import org.sopt.dosopttemplate.server.user.UserApiManage
-import org.sopt.dosopttemplate.server.user.UserRepository
+import org.sopt.dosopttemplate.presentation.adapter.FriendsSealedAdapter
 
 class HomeFragment : Fragment() {
 
-    private var binding: FragmentHomeBinding? = null
-    private var adapter: UserAdapter? = null
-    private lateinit var viewModel: HomeViewModel
+    // 코드리뷰 반영 어댑터 전역변수로 선언해두고, 뷰 종료시 함께 지워서 메모리 누수 방지하기
+    private var _binding: FragmentHomeBinding? = null
+    private var _adapter: FriendsSealedAdapter? = null
+
+    private val binding: FragmentHomeBinding
+        get() = requireNotNull(_binding) { "바인딩 error" }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentHomeBinding.inflate(inflater, container, false)
-        return binding?.root
+    ): View {
+        _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // ViewModel 초기화
-        viewModel = ViewModelProvider(this, HomeViewModelFactory(UserRepository(UserApiManage(
-            ServicePool.userService)))).get(HomeViewModel::class.java)
-
-        // RecyclerView에 어댑터 설정
+        // RecyclerView에 어댑터 설정하고 더미 데이터 추가
         setupRecyclerView()
-
-        // API 호출 및 데이터 갱신
-        viewModel.getUserList(page = 1)
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        // 뷰 바인딩 해제, 어댑터 해제
-        binding = null
-        adapter = null
+        // 뷰 바인딩 해제, 어댑터 해제(코드리뷰 반영)
+        _binding = null
+        _adapter = null
     }
 
     private fun setupRecyclerView() {
-        adapter = UserAdapter()
-        binding?.rvFriends?.adapter = adapter
-        binding?.rvFriends?.layoutManager = LinearLayoutManager(requireContext())
-
-        viewModel.userList.observe(viewLifecycleOwner, Observer { userList ->
-            adapter?.submitList(userList)
-        })
+        val friendsSealedAdapter = FriendsSealedAdapter(requireContext())
+        binding.rvFriends.adapter = friendsSealedAdapter
+        friendsSealedAdapter.setFriendsData(ArrayList(DummyFriendsData.dummyFriendList))
     }
+
+
+
 }
