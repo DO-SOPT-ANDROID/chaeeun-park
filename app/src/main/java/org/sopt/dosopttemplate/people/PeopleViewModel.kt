@@ -1,4 +1,4 @@
-package org.sopt.dosopttemplate.presentation.home
+package org.sopt.dosopttemplate.people
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -8,7 +8,7 @@ import kotlinx.coroutines.launch
 import org.sopt.dosopttemplate.server.user.UserRepository
 import org.sopt.dosopttemplate.server.user.UserDataResp
 
-class HomeViewModel(private val userRepository: UserRepository) : ViewModel() {
+class PeopleViewModel(private val userRepository: UserRepository) : ViewModel() {
 
     private val _userList = MutableLiveData<List<UserDataResp>>()
     val userList: LiveData<List<UserDataResp>> get() = _userList
