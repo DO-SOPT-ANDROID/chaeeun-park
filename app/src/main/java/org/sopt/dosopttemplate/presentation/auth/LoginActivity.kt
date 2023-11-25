@@ -41,6 +41,7 @@ class LoginActivity : AppCompatActivity() {
             val userId = binding.etSignupId.text.toString()
             val userPw = binding.etSignupPw.text.toString()
 
+
             val loginReq = LoginReq(userId, userPw)
             val call = ServicePool.authService.login(loginReq)
 
@@ -75,6 +76,7 @@ class LoginActivity : AppCompatActivity() {
         val userId = loginResp.id.toString()
         val toastMessage = "로그인에 성공했어요! USER의 ID는 $userId 입니둥."
         Toast.makeText(this, toastMessage, Toast.LENGTH_SHORT).show()
+
 
         val intent = Intent(this, BnvActivity::class.java)
         intent.putExtra("ID", userId)
