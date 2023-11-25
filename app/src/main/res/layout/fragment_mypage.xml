@@ -68,31 +68,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_main_id_title" />
 
-    <TextView
-        android:id="@+id/tv_main_mbti_title"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="40dp"
-        android:text="@string/tv_signup_mbti"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_main_id" />
-
-    <TextView
-        android:id="@+id/tv_main_mbti"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="42dp"
-        android:layout_marginTop="10dp"
-        android:text=""
-        android:textColor="#808080"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_main_mbti_title" />
-
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_show_bottomsheet"
         android:layout_width="0dp"

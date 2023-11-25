@@ -11,7 +11,6 @@ import org.sopt.dosopttemplate.databinding.FragmentMypageBinding
 import org.sopt.dosopttemplate.di.UserSharedPreferences
 import org.sopt.dosopttemplate.presentation.auth.LoginActivity
 
-
 class MypageFragment : Fragment() {
 
     private var _binding: FragmentMypageBinding? = null
@@ -46,13 +45,13 @@ class MypageFragment : Fragment() {
             binding.run {
                 tvMainId.text = spId
                 tvMainNickname.text = spNickname
-                tvMainMbti.text = spMbti
+                //tvMainMbti.text = spMbti
             }
         } else {
             binding.run {
                 tvMainId.text = getId
                 tvMainNickname.text = getNickname
-                tvMainMbti.text = getMbti
+                //tvMainMbti.text = getMbti
             }
         }
 
@@ -76,6 +75,7 @@ class MypageFragment : Fragment() {
             showBottomSheet()
         }
     }
+
     fun showBottomSheet() {
         val shareFriendsFragment = ShareFriendsFragment()
         shareFriendsFragment.show(childFragmentManager, shareFriendsFragment.tag)
