@@ -86,7 +86,6 @@
         android:layout_marginEnd="40dp"
         android:textColor="@color/birthday_red"
         android:textSize="12sp"
-        android:text="@string/errormsg_signupId"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tilSignupId"/>
@@ -121,7 +120,6 @@
             android:layout_marginTop="5dp"
             android:textColor="@color/birthday_red"
             android:textSize="12sp"
-            android:text="@string/errormsg_signup"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tilSignupPw"/>
