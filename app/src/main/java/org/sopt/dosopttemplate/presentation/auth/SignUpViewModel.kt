@@ -33,6 +33,23 @@ class SignUpViewModel : ViewModel() {
     private val _isSignUpButtonEnabled = MutableLiveData<Boolean>()
     val isSignUpButtonEnabled: LiveData<Boolean> get() = _isSignUpButtonEnabled
 
+    fun validateId(id: String) {
+        _isIdValid.value = id.matches(Regex("^[a-zA-Z0-9]{6,10}$"))
+    }
+
+    fun validatePassword(password: String) {
+        _isPasswordValid.value =
+            password.matches(Regex("^(?=.*[a-zA-Z])(?=.*\\d)(?=.*[@\$!%*?&])[A-Za-z\\d@$!%*?&]{6,12}$"))
+    }
+
+    fun validateNickname(nickname: String) {
+        _isNicknameValid.value = nickname.isNotBlank()
+    }
+
+    fun validateMbti(mbti: String) {
+        _isMbtiValid.value = mbti.isNotBlank()
+    }
+
 
     init {
         // 기본값을 false로 초기화
@@ -106,15 +123,9 @@ class SignUpViewModel : ViewModel() {
     }
 
     fun updateSignupButtonState() {
-        // Set the value based on the validity of ID, password, nickname, and MBTI
         _isSignUpButtonEnabled.value = _isIdValid.value == true &&
                 _isPasswordValid.value == true &&
                 _isNicknameValid.value == true &&
                 _isMbtiValid.value == true
-    }
-
-    // 추가된 함수: 비밀번호 에러 메시지 갱신
-    fun updatePasswordError(errorMessage: String) {
-        _passwordErrorMessage.value = errorMessage
     }
 }

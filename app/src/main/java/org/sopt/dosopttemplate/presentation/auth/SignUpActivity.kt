@@ -2,8 +2,11 @@ package org.sopt.dosopttemplate.presentation.auth
 
 import android.content.Context
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -28,12 +31,55 @@ class SignUpActivity : AppCompatActivity() {
 
         setupSignUpButton()
         setupKeyboardHiding()
+        setupTextWatchers() // Add this line to set up TextWatchers
 
         val backPressedUtil = BackPressedUtil<ActivitySignupBinding>(this)
         backPressedUtil.BackButton()
 
         observeSignUpResult()
         observeInputValidation()
+    }
+
+    private fun setupTextWatchers() {
+        binding.etSignupId.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                viewModel.validateId(s.toString())
+            }
+
+            override fun afterTextChanged(s: Editable?) {}
+        })
+
+        binding.etSignupPw.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                viewModel.validatePassword(s.toString())
+            }
+
+            override fun afterTextChanged(s: Editable?) {}
+        })
+
+        binding.etSignupNickname.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                viewModel.validateNickname(s.toString())
+            }
+
+            override fun afterTextChanged(s: Editable?) {}
+        })
+
+        binding.etSignupMbti.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                viewModel.validateMbti(s.toString())
+            }
+
+            override fun afterTextChanged(s: Editable?) {}
+        })
     }
 
     private fun setupSignUpButton() {
@@ -100,21 +146,42 @@ class SignUpActivity : AppCompatActivity() {
 
     private fun updateSignupButtonState() {
         viewModel.updateSignupButtonState()
+        val isEnabled = viewModel.isSignUpButtonEnabled.value == true
+        binding.btnSignupSignup.isEnabled = isEnabled
+        if (isEnabled) {
+            binding.btnSignupSignup.setBackgroundColor(ContextCompat.getColor(this, R.color.melon_green))
+        } else {
+            binding.btnSignupSignup.setBackgroundColor(ContextCompat.getColor(this, R.color.btn_light_gray))
+        }
     }
 
     private fun handleInputValidation(textInputLayout: TextInputLayout, isValid: Boolean, errorMessage: String) {
         val editText = textInputLayout.editText
+        val errorTextView: TextView? = when (textInputLayout.id) {
+            R.id.tilSignupId -> binding.tvSignupIdError
+            R.id.tilSignupPw -> binding.tvSignupPwError
+            else -> null
+        }
 
         if (editText?.text.isNullOrBlank()) {
             textInputLayout.error = null
             textInputLayout.boxStrokeColor = ContextCompat.getColor(this, R.color.black)
+            textInputLayout.helperText = ""
+            errorTextView?.visibility = View.GONE
         } else {
             if (!isValid) {
                 textInputLayout.error = errorMessage
                 textInputLayout.boxStrokeColor = ContextCompat.getColor(this, R.color.birthday_red)
+                textInputLayout.helperText = errorMessage
+                updateSignupButtonState() //
+                errorTextView?.text = errorMessage
+                errorTextView?.visibility = View.VISIBLE
             } else {
                 textInputLayout.error = null
                 textInputLayout.boxStrokeColor = ContextCompat.getColor(this, R.color.black)
+                textInputLayout.helperText = ""
+                updateSignupButtonState() //
+                errorTextView?.visibility = View.GONE
             }
         }
     }
