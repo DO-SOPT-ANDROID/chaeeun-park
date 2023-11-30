@@ -49,8 +49,6 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="30dp"
         android:layout_marginTop="5dp"
-        app:errorEnabled="true"
-        app:error="@{signupviewModel.isIdError}"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_signup_id">
@@ -68,6 +66,7 @@
         app:layout_constraintTop_toBottomOf="@id/tv_signup_id" />
     </com.google.android.material.textfield.TextInputLayout>
 
+
     <TextView
         android:id="@+id/tv_signup_pw"
         android:layout_width="0dp"
@@ -78,15 +77,27 @@
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tilSignupId" />
+    <TextView
+        android:id="@+id/tvSignupIdError"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="30dp"
+        android:layout_marginTop="3dp"
+        android:layout_marginEnd="40dp"
+        android:textColor="@color/birthday_red"
+        android:textSize="12sp"
+        android:text="@string/errormsg_signupId"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tilSignupId"/>
+
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/tilSignupPw"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="30dp"
-        android:layout_marginTop="5dp"
-        app:errorEnabled="true"
-        app:error="@{signupviewModel.isPasswordError}"
+        android:layout_marginTop="3dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_signup_pw">
@@ -102,6 +113,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_signup_pw" />
+        <TextView
+            android:id="@+id/tvSignupPwError"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="30dp"
+            android:layout_marginTop="5dp"
+            android:textColor="@color/birthday_red"
+            android:textSize="12sp"
+            android:text="@string/errormsg_signup"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tilSignupPw"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
