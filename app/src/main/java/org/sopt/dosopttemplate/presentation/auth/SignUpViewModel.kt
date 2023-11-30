@@ -33,6 +33,36 @@ class SignUpViewModel : ViewModel() {
     private val _isSignUpButtonEnabled = MutableLiveData<Boolean>()
     val isSignUpButtonEnabled: LiveData<Boolean> get() = _isSignUpButtonEnabled
 
+    init {
+        initializeDefaultValues()
+
+        // 입력 유효성이 변경될 때마다 결과값에 반영
+        observeInputValidation()
+
+        // 비밀번호 에러 메시지가 변경될 때마다 회원가입 버튼 활성화 여부 갱신
+        observePasswordErrorMessage()
+    }
+
+    private fun initializeDefaultValues() {
+        // 기본값을 false로 초기화
+        _isIdValid.value = false
+        _isPasswordValid.value = false
+        _isNicknameValid.value = false
+        _isMbtiValid.value = false
+        _passwordErrorMessage.value = ""
+        _isSignUpButtonEnabled.value = false
+    }
+
+    private fun observeInputValidation() {
+        listOf(_isIdValid, _isPasswordValid, _isNicknameValid, _isMbtiValid).forEach { field ->
+            Transformations.map(field) { updateSignupResult() }
+        }
+    }
+
+    private fun observePasswordErrorMessage() {
+        Transformations.map(_passwordErrorMessage) { updateSignupButtonState() }
+    }
+
     fun validateId(id: String) {
         _isIdValid.value = id.matches(Regex("^[a-zA-Z0-9]{6,10}$"))
     }
@@ -50,82 +80,48 @@ class SignUpViewModel : ViewModel() {
         _isMbtiValid.value = mbti.isNotBlank()
     }
 
-
-    init {
-        // 기본값을 false로 초기화
-        _isIdValid.value = false
-        _isPasswordValid.value = false
-        _isNicknameValid.value = false
-        _isMbtiValid.value = false
-        _passwordErrorMessage.value = ""
-        _isSignUpButtonEnabled.value = false
-
-        // 입력 유효성이 변경될 때마다 결과값에 반영
-        Transformations.map(_isIdValid) {
-            updateSignupResult()
-        }
-
-        Transformations.map(_isPasswordValid) {
-            updateSignupResult()
-        }
-
-        Transformations.map(_isNicknameValid) {
-            updateSignupResult()
-        }
-
-        Transformations.map(_isMbtiValid) {
-            updateSignupResult()
-        }
-
-        // 비밀번호 에러 메시지가 변경될 때마다 회원가입 버튼 활성화 여부 갱신
-        Transformations.map(_passwordErrorMessage) {
-            updateSignupButtonState()
+    fun signUp(userId: String, userPw: String, userNickname: String, userMbti: String) {
+        validateInputFields(userId, userPw, userNickname, userMbti)
+        if (allInputFieldsAreValid()) {
+            executeSignUp(userId, userPw, userNickname, userMbti)
+        } else {
+            _signupResult.value = false
         }
     }
 
-    fun signUp(userId: String, userPw: String, userNickname: String, userMbti: String) {
+    private fun validateInputFields(userId: String, userPw: String, userNickname: String, userMbti: String) {
         _isIdValid.value = userId.matches(Regex("^[a-zA-Z0-9]{6,10}$"))
         _isPasswordValid.value =
             userPw.matches(Regex("^(?=.*[a-zA-Z])(?=.*\\d)(?=.*[@\$!%*?&])[A-Za-z\\d@$!%*?&]{6,12}$"))
         _isNicknameValid.value = userNickname.isNotBlank()
         _isMbtiValid.value = userMbti.isNotBlank()
+    }
 
-        // 모든 입력 유효성을 검사한 후 회원가입 진행
-        if (_isIdValid.value == true &&
-            _isPasswordValid.value == true &&
-            _isNicknameValid.value == true &&
-            _isMbtiValid.value == true
-        ) {
-            val signUpReq = SignUpReq(userId, userPw, userNickname, userMbti)
-            val call = ServicePool.authService.signUp(signUpReq)
+    private fun allInputFieldsAreValid(): Boolean {
+        return listOf(_isIdValid, _isPasswordValid, _isNicknameValid, _isMbtiValid).all { it.value == true }
+    }
 
-            call.enqueue(object : Callback<Unit> {
-                override fun onResponse(call: Call<Unit>, response: Response<Unit>) {
-                    _signupResult.value = response.isSuccessful
-                }
+    private fun executeSignUp(userId: String, userPw: String, userNickname: String, userMbti: String) {
+        val signUpReq = SignUpReq(userId, userPw, userNickname, userMbti)
+        val call = ServicePool.authService.signUp(signUpReq)
 
-                override fun onFailure(call: Call<Unit>, t: Throwable) {
-                    _signupResult.value = false
-                }
-            })
-        } else {
-            // 어떠한 입력 유효성도 통과하지 못하면 회원가입 결과를 false로 설정
-            _signupResult.value = false
-        }
+        call.enqueue(object : Callback<Unit> {
+            override fun onResponse(call: Call<Unit>, response: Response<Unit>) {
+                _signupResult.value = response.isSuccessful
+            }
+
+            override fun onFailure(call: Call<Unit>, t: Throwable) {
+                _signupResult.value = false
+            }
+        })
     }
 
     private fun updateSignupResult() {
         // 입력 유효성이 변경될 때마다 결과값 갱신
-        _signupResult.value = _isIdValid.value == true &&
-                _isPasswordValid.value == true &&
-                _isNicknameValid.value == true &&
-                _isMbtiValid.value == true
+        _signupResult.value = allInputFieldsAreValid()
     }
 
     fun updateSignupButtonState() {
-        _isSignUpButtonEnabled.value = _isIdValid.value == true &&
-                _isPasswordValid.value == true &&
-                _isNicknameValid.value == true &&
-                _isMbtiValid.value == true
+        _isSignUpButtonEnabled.value = allInputFieldsAreValid()
     }
 }

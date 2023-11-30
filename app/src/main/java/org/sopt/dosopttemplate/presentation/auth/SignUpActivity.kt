@@ -31,55 +31,30 @@ class SignUpActivity : AppCompatActivity() {
 
         setupSignUpButton()
         setupKeyboardHiding()
-        setupTextWatchers() // Add this line to set up TextWatchers
-
-        val backPressedUtil = BackPressedUtil<ActivitySignupBinding>(this)
-        backPressedUtil.BackButton()
+        setupTextWatchers()
+        setupBackPressedListener()
 
         observeSignUpResult()
         observeInputValidation()
     }
 
     private fun setupTextWatchers() {
-        binding.etSignupId.addTextChangedListener(object : TextWatcher {
+        binding.etSignupId.addTextChangedListener(createTextWatcher { viewModel.validateId(it) })
+        binding.etSignupPw.addTextChangedListener(createTextWatcher { viewModel.validatePassword(it) })
+        binding.etSignupNickname.addTextChangedListener(createTextWatcher { viewModel.validateNickname(it) })
+        binding.etSignupMbti.addTextChangedListener(createTextWatcher { viewModel.validateMbti(it) })
+    }
+
+    private fun createTextWatcher(afterTextChanged: (String) -> Unit): TextWatcher {
+        return object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                viewModel.validateId(s.toString())
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(s: Editable?) {
+                afterTextChanged(s.toString())
             }
-
-            override fun afterTextChanged(s: Editable?) {}
-        })
-
-        binding.etSignupPw.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                viewModel.validatePassword(s.toString())
-            }
-
-            override fun afterTextChanged(s: Editable?) {}
-        })
-
-        binding.etSignupNickname.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                viewModel.validateNickname(s.toString())
-            }
-
-            override fun afterTextChanged(s: Editable?) {}
-        })
-
-        binding.etSignupMbti.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                viewModel.validateMbti(s.toString())
-            }
-
-            override fun afterTextChanged(s: Editable?) {}
-        })
+        }
     }
 
     private fun setupSignUpButton() {
@@ -105,7 +80,7 @@ class SignUpActivity : AppCompatActivity() {
 
     private fun observeInputValidation() {
         viewModel.isIdValid.observe(this, Observer { isValid ->
-            handleInputValidation(binding.tilSignupId, isValid, "")
+            handleInputValidation(binding.tilSignupId, isValid, "", binding.tvSignupIdError)
             updateSignupButtonState()
         })
 
@@ -115,53 +90,43 @@ class SignUpActivity : AppCompatActivity() {
             } else {
                 viewModel.passwordErrorMessage.value.orEmpty()
             }
-            handleInputValidation(binding.tilSignupPw, isValid, errorMessage)
+            handleInputValidation(binding.tilSignupPw, isValid, errorMessage, binding.tvSignupPwError)
             updateSignupButtonState()
         })
 
         viewModel.isNicknameValid.observe(this, Observer { isValid ->
-            handleInputValidation(binding.tilSignupNickname, isValid, "")
+            handleInputValidation(binding.tilSignupNickname, isValid, "", null)
             updateSignupButtonState()
         })
 
         viewModel.isMbtiValid.observe(this, Observer { isValid ->
-            handleInputValidation(binding.tilSignupMbti, isValid, "")
+            handleInputValidation(binding.tilSignupMbti, isValid, "", null)
             updateSignupButtonState()
         })
 
         viewModel.passwordErrorMessage.observe(this, Observer { errorMessage ->
-            handleInputValidation(binding.tilSignupPw, false, errorMessage)
+            handleInputValidation(binding.tilSignupPw, false, errorMessage, binding.tvSignupPwError)
             updateSignupButtonState()
         })
 
         viewModel.isSignUpButtonEnabled.observe(this, Observer { isEnabled ->
             binding.btnSignupSignup.isEnabled = isEnabled
-            if (isEnabled) {
-                binding.btnSignupSignup.setBackgroundColor(ContextCompat.getColor(this, R.color.btn_light_gray))
-            } else {
-                binding.btnSignupSignup.setBackgroundColor(ContextCompat.getColor(this, R.color.btn_light_gray))
-            }
+            val colorRes = if (isEnabled) R.color.melon_green else R.color.btn_light_gray
+            binding.btnSignupSignup.setBackgroundColor(ContextCompat.getColor(this, colorRes))
         })
     }
 
     private fun updateSignupButtonState() {
         viewModel.updateSignupButtonState()
-        val isEnabled = viewModel.isSignUpButtonEnabled.value == true
-        binding.btnSignupSignup.isEnabled = isEnabled
-        if (isEnabled) {
-            binding.btnSignupSignup.setBackgroundColor(ContextCompat.getColor(this, R.color.melon_green))
-        } else {
-            binding.btnSignupSignup.setBackgroundColor(ContextCompat.getColor(this, R.color.btn_light_gray))
-        }
     }
 
-    private fun handleInputValidation(textInputLayout: TextInputLayout, isValid: Boolean, errorMessage: String) {
+    private fun handleInputValidation(
+        textInputLayout: TextInputLayout,
+        isValid: Boolean,
+        errorMessage: String,
+        errorTextView: TextView?
+    ) {
         val editText = textInputLayout.editText
-        val errorTextView: TextView? = when (textInputLayout.id) {
-            R.id.tilSignupId -> binding.tvSignupIdError
-            R.id.tilSignupPw -> binding.tvSignupPwError
-            else -> null
-        }
 
         if (editText?.text.isNullOrBlank()) {
             textInputLayout.error = null
@@ -173,14 +138,14 @@ class SignUpActivity : AppCompatActivity() {
                 textInputLayout.error = errorMessage
                 textInputLayout.boxStrokeColor = ContextCompat.getColor(this, R.color.birthday_red)
                 textInputLayout.helperText = errorMessage
-                updateSignupButtonState() //
-                errorTextView?.text = errorMessage
+                updateSignupButtonState()
+                errorTextView?.text = "유효하지 않은 값입니다."
                 errorTextView?.visibility = View.VISIBLE
             } else {
                 textInputLayout.error = null
                 textInputLayout.boxStrokeColor = ContextCompat.getColor(this, R.color.black)
                 textInputLayout.helperText = ""
-                updateSignupButtonState() //
+                updateSignupButtonState()
                 errorTextView?.visibility = View.GONE
             }
         }
@@ -193,5 +158,10 @@ class SignUpActivity : AppCompatActivity() {
 
     private fun hideKeyboard(view: View) {
         inputMethodManager?.hideSoftInputFromWindow(view.windowToken, 0)
+    }
+
+    private fun setupBackPressedListener() {
+        val backPressedUtil = BackPressedUtil<ActivitySignupBinding>(this)
+        backPressedUtil.BackButton()
     }
 }
