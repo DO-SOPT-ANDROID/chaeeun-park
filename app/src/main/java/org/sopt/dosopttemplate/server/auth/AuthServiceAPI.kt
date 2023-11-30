@@ -1,6 +1,7 @@
 package org.sopt.dosopttemplate.server.auth
 
 import retrofit2.Call
+import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.POST
 
@@ -10,7 +11,7 @@ interface AuthServiceAPI {
         @Body signUpReq: SignUpReq,
     ): Call<Unit>
     @POST("api/v1/members/sign-in")
-    fun login(
+   suspend fun login(
         @Body loginReq: LoginReq
-    ): Call<LoginResp>
+    ): Response<LoginResp>
 }

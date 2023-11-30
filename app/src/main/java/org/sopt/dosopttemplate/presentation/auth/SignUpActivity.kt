@@ -4,31 +4,36 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
+import com.google.android.material.textfield.TextInputLayout
 import org.sopt.dosopttemplate.R
 import org.sopt.dosopttemplate.databinding.ActivitySignupBinding
-import org.sopt.dosopttemplate.server.ServicePool
-import org.sopt.dosopttemplate.server.auth.SignUpReq
 import org.sopt.dosopttemplate.util.BackPressedUtil
 import org.sopt.dosopttemplate.util.showShortSnackBar
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class SignUpActivity : AppCompatActivity() {
+
     private lateinit var binding: ActivitySignupBinding
     private var inputMethodManager: InputMethodManager? = null
+    private val viewModel: SignUpViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivitySignupBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_signup)
+        binding.lifecycleOwner = this
 
         setupSignUpButton()
         setupKeyboardHiding()
 
         val backPressedUtil = BackPressedUtil<ActivitySignupBinding>(this)
         backPressedUtil.BackButton()
+
+        observeSignUpResult()
+        observeInputValidation()
     }
 
     private fun setupSignUpButton() {
@@ -38,60 +43,80 @@ class SignUpActivity : AppCompatActivity() {
             val userNickname = binding.etSignupNickname.text.toString()
             val userMbti = binding.etSignupMbti.text.toString()
 
-            if (isInputValid(userId, userPw, userNickname, userMbti)) {
-                val signUpReq = SignUpReq(userId, userPw, userNickname, userMbti)
-                val call = ServicePool.authService.signUp(signUpReq)
-
-                call.enqueue(object : Callback<Unit> {
-                    override fun onResponse(call: Call<Unit>, response: Response<Unit>) {
-                        if (response.isSuccessful) {
-                            finish()
-                        } else {
-                            showShortSnackBar(binding.root, getString(R.string.signup_fail))
-                        }
-                    }
-
-                    override fun onFailure(call: Call<Unit>, t: Throwable) {
-                        showShortSnackBar(binding.root, getString(R.string.network_error))
-                    }
-                })
-            }
+            viewModel.signUp(userId, userPw, userNickname, userMbti)
         }
     }
 
-    private fun isInputValid(
-        userId: String,
-        userPw: String,
-        userNickname: String,
-        userMbti: String
-    ): Boolean {
-        when {
-            userId.isBlank() || userPw.isBlank() || userNickname.isBlank() || userMbti.isBlank() -> {
+    private fun observeSignUpResult() {
+        viewModel.signupResult.observe(this, Observer { success ->
+            if (success) {
+                finish()
+            } else {
                 showShortSnackBar(binding.root, getString(R.string.signup_fail))
-                return false
             }
+        })
+    }
 
-            userId.length !in 6..10 -> {
-                showShortSnackBar(binding.root, getString(R.string.signup_id))
-                return false
+    private fun observeInputValidation() {
+        viewModel.isIdValid.observe(this, Observer { isValid ->
+            handleInputValidation(binding.tilSignupId, isValid, "")
+            updateSignupButtonState()
+        })
+
+        viewModel.isPasswordValid.observe(this, Observer { isValid ->
+            val errorMessage = if (binding.etSignupPw.text.isNullOrBlank()) {
+                ""
+            } else {
+                viewModel.passwordErrorMessage.value.orEmpty()
             }
+            handleInputValidation(binding.tilSignupPw, isValid, errorMessage)
+            updateSignupButtonState()
+        })
 
-            userPw.length !in 8..12 -> {
-                showShortSnackBar(binding.root, getString(R.string.signup_pw))
-                return false
+        viewModel.isNicknameValid.observe(this, Observer { isValid ->
+            handleInputValidation(binding.tilSignupNickname, isValid, "")
+            updateSignupButtonState()
+        })
+
+        viewModel.isMbtiValid.observe(this, Observer { isValid ->
+            handleInputValidation(binding.tilSignupMbti, isValid, "")
+            updateSignupButtonState()
+        })
+
+        viewModel.passwordErrorMessage.observe(this, Observer { errorMessage ->
+            handleInputValidation(binding.tilSignupPw, false, errorMessage)
+            updateSignupButtonState()
+        })
+
+        viewModel.isSignUpButtonEnabled.observe(this, Observer { isEnabled ->
+            binding.btnSignupSignup.isEnabled = isEnabled
+            if (isEnabled) {
+                binding.btnSignupSignup.setBackgroundColor(ContextCompat.getColor(this, R.color.btn_light_gray))
+            } else {
+                binding.btnSignupSignup.setBackgroundColor(ContextCompat.getColor(this, R.color.btn_light_gray))
             }
+        })
+    }
 
-            userNickname.isBlank() -> {
-                showShortSnackBar(binding.root, getString(R.string.signup_nickname))
-                return false
-            }
+    private fun updateSignupButtonState() {
+        viewModel.updateSignupButtonState()
+    }
 
-            userMbti.isBlank() -> {
-                showShortSnackBar(binding.root, getString(R.string.signup_mbti))
-                return false
+    private fun handleInputValidation(textInputLayout: TextInputLayout, isValid: Boolean, errorMessage: String) {
+        val editText = textInputLayout.editText
+
+        if (editText?.text.isNullOrBlank()) {
+            textInputLayout.error = null
+            textInputLayout.boxStrokeColor = ContextCompat.getColor(this, R.color.black)
+        } else {
+            if (!isValid) {
+                textInputLayout.error = errorMessage
+                textInputLayout.boxStrokeColor = ContextCompat.getColor(this, R.color.birthday_red)
+            } else {
+                textInputLayout.error = null
+                textInputLayout.boxStrokeColor = ContextCompat.getColor(this, R.color.black)
             }
         }
-        return true
     }
 
     private fun setupKeyboardHiding() {
