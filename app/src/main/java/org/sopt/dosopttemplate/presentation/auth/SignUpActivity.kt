@@ -80,12 +80,12 @@ class SignUpActivity : AppCompatActivity() {
 
     private fun observeInputValidation() {
         viewModel.isIdValid.observe(this, Observer { isValid ->
-            handleInputValidation(binding.tilSignupId, isValid, "", binding.tvSignupIdError)
+            handleInputValidation(binding.tilSignupId, isValid, "아이디: 영문, 숫자를 포함 6-10글자", binding.tvSignupIdError)
             updateSignupButtonState()
         })
 
         viewModel.isPasswordValid.observe(this, Observer { isValid ->
-            handleInputValidation(binding.tilSignupPw, isValid, "", binding.tvSignupPwError)
+            handleInputValidation(binding.tilSignupPw, isValid, "비밀번호: 영문, 숫자, 특수 문자 포함 6-12글자", binding.tvSignupPwError)
             updateSignupButtonState()
         })
 
@@ -134,7 +134,7 @@ class SignUpActivity : AppCompatActivity() {
                 textInputLayout.boxStrokeColor = ContextCompat.getColor(this, R.color.birthday_red)
                 textInputLayout.helperText = errorMessage
                 updateSignupButtonState()
-                errorTextView?.text = "유효하지 않은 값입니다."
+                errorTextView?.text = "아래 조건을 만족해주세요."
                 errorTextView?.visibility = View.VISIBLE
             } else {
                 textInputLayout.error = null
