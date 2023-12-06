@@ -85,12 +85,7 @@ class SignUpActivity : AppCompatActivity() {
         })
 
         viewModel.isPasswordValid.observe(this, Observer { isValid ->
-            val errorMessage = if (binding.etSignupPw.text.isNullOrBlank()) {
-                ""
-            } else {
-                viewModel.passwordErrorMessage.value.orEmpty()
-            }
-            handleInputValidation(binding.tilSignupPw, isValid, errorMessage, binding.tvSignupPwError)
+            handleInputValidation(binding.tilSignupPw, isValid, "", binding.tvSignupPwError)
             updateSignupButtonState()
         })
 
