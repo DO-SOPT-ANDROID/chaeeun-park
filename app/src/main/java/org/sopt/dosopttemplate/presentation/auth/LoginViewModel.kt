@@ -2,55 +2,31 @@ package org.sopt.dosopttemplate.presentation.auth
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import org.sopt.dosopttemplate.server.ServicePool
 import org.sopt.dosopttemplate.server.auth.LoginReq
 import org.sopt.dosopttemplate.server.auth.LoginResp
 
-
 class LoginViewModel : ViewModel() {
 
-    /*
-    fun login(id: String, password: String) {
-    viewModelScope.launch {
-        try {
-            val response = authService.login(RequestLoginDto(id, password))
-            if (response.isSuccessful) {
-                loginResult.value = response.body()
-                loginSuccess.value = true
-            } else {
-                loginSuccess.value = false
-            }
-        } catch (e: Exception) {
-            // TODO: 에러 처리 로직
-        }
-    }
-}*/
+    private val _loginResult = MutableStateFlow<Result<LoginResp>>(Result.Idle)
+    val loginResult = _loginResult.asStateFlow()
 
     fun performLogin(
         userId: String,
-        userPw: String,
-        onSuccess: (LoginResp) -> Unit,
-        onFailure: () -> Unit,
-        onNetworkError: () -> Unit
+        userPw: String
     ) {
         viewModelScope.launch {
             try {
                 val loginReq = LoginReq(userId, userPw)
-                val response = ServicePool.authService.login(loginReq)
-                if (response.isSuccessful) {
-                    val loginResp = response.body()
-                    if (loginResp != null) {
-                        onSuccess(loginResp)
-                    } else {
-                        onFailure()
-                    }
-                } else {
-                    onFailure()
-                }
-
+                _loginResult.value = Result.Success(
+                    ServicePool.authService.login(loginReq).body()
+                        ?: throw Exception("값을 입력해주세요.")
+                )
             } catch (e: Exception) {
-                onNetworkError()
+                _loginResult.value = Result.Error(e)
             }
         }
     }
