@@ -32,4 +32,7 @@
     <string name="tv_present">선물하기</string>
     <string name="network_error">네트워크 오류</string>
     <string name="bnv_plus">PLUS</string>
+    <string name="invalid_input">유효하지 않은 값입니다.</string>
+    <string name="errormsg_signup">영어, 숫자, 특수문자를 포함하여 6-12글자 이내로 입력해 주세요.</string>
+    <string name="errormsg_signupId">영문, 숫자를 포함하여 6-10글자로 입력해 주세요.</string>
 </resources>
